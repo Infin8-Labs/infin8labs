@@ -1,6 +1,6 @@
 import './Projects.css';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef } from 'react';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { useRef, useState } from 'react';
 
 // Using local generated images or placeholders
 import mmImg from '/project_mm.png';
@@ -27,11 +27,13 @@ const projects = [
     category: "Online Payment Platform",
     description: "Secure and seamless digital payment infrastructure and wallet integrations.",
     link: "https://snaponn.vercel.app/",
-    image: "https://images.unsplash.com/photo-1620321023374-d1a68fbc720d?auto=format&fit=crop&q=80&w=800&h=600"
+    image: snaponnImg
   }
 ];
 
 export default function Projects() {
+  const [showAll, setShowAll] = useState(false);
+  const [bursting, setBursting] = useState(false);
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -39,6 +41,8 @@ export default function Projects() {
   });
 
   const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
+
+  const displayedProjects = showAll ? projects : projects.slice(0, 2);
 
   return (
     <section id="projects" className="projects section-padding" ref={containerRef}>
@@ -49,30 +53,72 @@ export default function Projects() {
         </div>
 
         <div className="projects-list">
-          {projects.map((project, index) => (
-            <motion.a
-              href={project.link}
-              target="_blank"
-              rel="noreferrer"
-              className="project-row"
-              key={index}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.6 }}
+          <AnimatePresence initial={false}>
+            {displayedProjects.map((project, index) => (
+              <motion.a
+                href={project.link}
+                target="_blank"
+                rel="noreferrer"
+                className="project-row"
+                key={project.title}
+                layout
+                initial={{ opacity: 0, height: 0, overflow: 'hidden' }}
+                animate={{ opacity: 1, height: 'auto', overflow: 'visible' }}
+                exit={{ opacity: 0, height: 0, overflow: 'hidden', margin: 0, padding: 0 }}
+                transition={{ duration: 0.5, ease: 'easeInOut' }}
+              >
+                <div className="project-info">
+                  <span className="caption project-category">{project.category}</span>
+                  <h3 className="display-md">{project.title}</h3>
+                  <p className="body-regular">{project.description}</p>
+                </div>
+                <div className="project-visual">
+                  <motion.div className="project-image-wrapper" style={{ y: index % 2 === 0 ? y : useTransform(scrollYProgress, [0, 1], [-50, 50]) }}>
+                    <img src={project.image} alt={project.title} />
+                  </motion.div>
+                </div>
+              </motion.a>
+            ))}
+          </AnimatePresence>
+        </div>
+
+        <div className="projects-action">
+          <motion.div 
+            className="glowing-button-wrapper"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+          >
+            <div className={`glowing-backdrop ${bursting ? 'burst' : ''}`}></div>
+            <a 
+              href="#projects" 
+              className="button-primary glowing-button"
+              onClick={(e) => {
+                e.preventDefault();
+                setBursting(true);
+                setTimeout(() => setBursting(false), 800);
+
+                if (!showAll) {
+                  setShowAll(true);
+                  setTimeout(() => {
+                    window.scrollBy({ top: 400, behavior: 'smooth' });
+                  }, 200);
+                } else {
+                  const section = document.getElementById('projects');
+                  if (section) {
+                    const top = section.getBoundingClientRect().top + window.scrollY - 80;
+                    window.scrollTo({ top, behavior: 'smooth' });
+                  }
+                  setTimeout(() => {
+                    setShowAll(false);
+                  }, 400);
+                }
+              }}
             >
-              <div className="project-info">
-                <span className="caption project-category">{project.category}</span>
-                <h3 className="display-md">{project.title}</h3>
-                <p className="body-regular">{project.description}</p>
-              </div>
-              <div className="project-visual">
-                <motion.div className="project-image-wrapper" style={{ y: index % 2 === 0 ? y : useTransform(scrollYProgress, [0, 1], [-50, 50]) }}>
-                  <img src={project.image} alt={project.title} />
-                </motion.div>
-              </div>
-            </motion.a>
-          ))}
+              {showAll ? "View Less" : "View All Projects"}
+            </a>
+          </motion.div>
         </div>
       </div>
     </section>
