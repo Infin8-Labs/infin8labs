@@ -13,7 +13,8 @@ export default function Contact() {
     setErrorMessage('');
 
     try {
-      const response = await fetch('http://localhost:5000/api/contact', {
+      const apiUrl = import.meta.env.DEV ? 'http://localhost:5000/api/contact' : '/api/contact';
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
