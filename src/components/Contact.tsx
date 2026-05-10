@@ -1,7 +1,45 @@
 import './Contact.css';
 import { motion } from 'framer-motion';
+import { useState } from 'react';
 
 export default function Contact() {
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', message: '' });
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus('loading');
+    setErrorMessage('');
+
+    try {
+      const response = await fetch('http://localhost:5000/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setStatus('success');
+        setFormData({ name: '', email: '', phone: '', message: '' }); // clear form
+        setTimeout(() => setStatus('idle'), 5000); // reset status after 5s
+      } else {
+        throw new Error(data.message || 'Something went wrong');
+      }
+    } catch (error: any) {
+      setStatus('error');
+      setErrorMessage(error.message || 'Failed to send message. Is the backend server running?');
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
   return (
     <section id="contact" className="contact section-padding">
       <div className="container">
@@ -39,23 +77,79 @@ export default function Contact() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <form className="contact-form" onSubmit={(e) => {
-              e.preventDefault();
-              alert("Thanks for your inquiry! We'll get back to you soon.");
-            }}>
+            <form className="contact-form" onSubmit={handleSubmit}>
               <div className="form-group">
                 <label className="caption">Name</label>
-                <input type="text" className="text-input" placeholder="Your Name" required />
+                <input 
+                  type="text" 
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="text-input" 
+                  placeholder="Your Name" 
+                  required 
+                  disabled={status === 'loading'}
+                />
               </div>
               <div className="form-group">
                 <label className="caption">Email</label>
-                <input type="email" className="text-input" placeholder="you@company.com" required />
+                <input 
+                  type="email" 
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="text-input" 
+                  placeholder="you@company.com" 
+                  required 
+                  disabled={status === 'loading'}
+                />
+              </div>
+              <div className="form-group">
+                <label className="caption">Phone Number (Optional)</label>
+                <input 
+                  type="tel" 
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  className="text-input" 
+                  placeholder="+91 00000 00000" 
+                  disabled={status === 'loading'}
+                />
               </div>
               <div className="form-group">
                 <label className="caption">Requirements / Project Details</label>
-                <textarea className="text-input" rows={5} placeholder="Tell us about what you want to build..." required></textarea>
+                <textarea 
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  className="text-input" 
+                  rows={5} 
+                  placeholder="Tell us about what you want to build..." 
+                  required
+                  disabled={status === 'loading'}
+                ></textarea>
               </div>
-              <button type="submit" className="button-primary submit-btn">Send Message</button>
+              
+              <button 
+                type="submit" 
+                className={`button-primary submit-btn ${status === 'loading' ? 'sending' : ''}`}
+                disabled={status === 'loading'}
+              >
+                {status === 'loading' ? (
+                  <span className="loader-ring"></span>
+                ) : 'Send Message'}
+              </button>
+
+              {status === 'success' && (
+                <p className="success-message" style={{ color: '#4CAF50', marginTop: '16px', textAlign: 'center' }}>
+                  Thanks for reaching out! We've sent a confirmation to your email.
+                </p>
+              )}
+              {status === 'error' && (
+                <p className="error-message" style={{ color: '#F44336', marginTop: '16px', textAlign: 'center' }}>
+                  {errorMessage}
+                </p>
+              )}
             </form>
           </motion.div>
         </div>

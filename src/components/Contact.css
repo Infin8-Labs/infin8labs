@@ -73,6 +73,32 @@
   margin-top: var(--spacing-md);
   width: 100%;
   padding: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+  min-height: 52px;
+}
+
+.submit-btn.sending {
+  background-color: var(--colors-surface-1);
+  border-color: var(--colors-accent-blue);
+  color: var(--colors-accent-blue);
+  box-shadow: 0 0 15px rgba(0, 153, 255, 0.2);
+  cursor: wait;
+}
+
+.loader-ring {
+  width: 22px;
+  height: 22px;
+  border: 2px solid rgba(0, 153, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: var(--colors-accent-blue);
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 @media (max-width: 810px) {
