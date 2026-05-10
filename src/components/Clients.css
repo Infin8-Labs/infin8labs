@@ -1,0 +1,25 @@
+.clients-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-xl);
+}
+
+.client-card {
+  padding: 32px;
+  background-color: var(--colors-surface-1);
+  border-radius: var(--rounded-xl);
+  border: 1px solid var(--colors-hairline);
+  transition: border-color 0.3s;
+}
+
+.client-card:hover {
+  border-color: var(--colors-accent-blue);
+}
+
+.client-card .headline {
+  margin-bottom: var(--spacing-sm);
+}
+
+.client-card .body-regular {
+  color: var(--colors-ink-muted);
+}

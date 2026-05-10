@@ -1,0 +1,56 @@
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-xl);
+}
+
+.team-card {
+  background-color: var(--colors-surface-1);
+  border-radius: var(--rounded-xl);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.team-image {
+  width: 100%;
+  height: 300px;
+}
+
+.team-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+.team-info {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.team-info .headline {
+  margin-bottom: 4px;
+}
+
+.team-role {
+  color: var(--colors-accent-blue);
+  margin-bottom: var(--spacing-sm);
+  display: block;
+}
+
+.team-info .body-sm {
+  color: var(--colors-ink-muted);
+  margin-bottom: var(--spacing-lg);
+  flex: 1;
+}
+
+.linkedin-link {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
