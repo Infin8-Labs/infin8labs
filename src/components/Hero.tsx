@@ -1,17 +1,22 @@
 import './Hero.css';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 export default function Hero() {
+  const { scrollY } = useScroll();
+  const backgroundY = useTransform(scrollY, [0, 1000], ['0%', '40%']);
+  const contentY = useTransform(scrollY, [0, 1000], ['0%', '15%']);
+  const opacity = useTransform(scrollY, [0, 600], [1, 0]);
+
   return (
     <section className="hero section-padding">
       {/* Animated Background Waves */}
-      <div className="hero-background">
+      <motion.div className="hero-background" style={{ y: backgroundY, opacity }}>
         <div className="wave wave1"></div>
         <div className="wave wave2"></div>
         <div className="wave wave3"></div>
-      </div>
+      </motion.div>
       
-      <div className="container hero-content">
+      <motion.div className="container hero-content" style={{ y: contentY }}>
         <motion.h1 
           className="display-xxl hero-title"
           initial={{ opacity: 0, y: 30 }}
@@ -39,7 +44,7 @@ export default function Hero() {
           <a href="#projects" className="button-primary">View Our Work</a>
           <a href="#contact" className="button-secondary">Contact Us</a>
         </motion.div>
-      </div>
+      </motion.div>
     </section>
   );
 }

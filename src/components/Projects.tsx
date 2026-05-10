@@ -40,7 +40,8 @@ export default function Projects() {
     offset: ["start end", "end start"]
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
+  const y1 = useTransform(scrollYProgress, [0, 1], [100, -100]);
+  const y2 = useTransform(scrollYProgress, [0, 1], [-50, 50]);
 
   const displayedProjects = showAll ? projects : projects.slice(0, 2);
 
@@ -73,7 +74,7 @@ export default function Projects() {
                   <p className="body-regular">{project.description}</p>
                 </div>
                 <div className="project-visual">
-                  <motion.div className="project-image-wrapper" style={{ y: index % 2 === 0 ? y : useTransform(scrollYProgress, [0, 1], [-50, 50]) }}>
+                  <motion.div className="project-image-wrapper" style={{ y: index % 2 === 0 ? y1 : y2 }}>
                     <img src={project.image} alt={project.title} />
                   </motion.div>
                 </div>
@@ -91,33 +92,37 @@ export default function Projects() {
             transition={{ delay: 0.3 }}
           >
             <div className={`glowing-backdrop ${bursting ? 'burst' : ''}`}></div>
-            <a 
-              href="#projects" 
-              className="button-primary glowing-button"
-              onClick={(e) => {
-                e.preventDefault();
-                setBursting(true);
-                setTimeout(() => setBursting(false), 800);
+              <button 
+                type="button"
+                className="button-primary glowing-button"
+                style={{ cursor: 'pointer', fontFamily: 'var(--font-body)', fontSize: '15px' }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setBursting(true);
+                  setTimeout(() => setBursting(false), 800);
 
-                if (!showAll) {
-                  setShowAll(true);
-                  setTimeout(() => {
-                    window.scrollBy({ top: 400, behavior: 'smooth' });
-                  }, 200);
-                } else {
-                  const section = document.getElementById('projects');
-                  if (section) {
-                    const top = section.getBoundingClientRect().top + window.scrollY - 80;
-                    window.scrollTo({ top, behavior: 'smooth' });
-                  }
-                  setTimeout(() => {
+                  if (!showAll) {
+                    setShowAll(true);
+                    setTimeout(() => {
+                      window.scrollBy({ top: 400, behavior: 'smooth' });
+                    }, 100);
+                  } else {
+                    const lenisWindow = window as unknown as { __lenis?: { scrollTo: (target: string, options?: object) => void } };
+                    if (lenisWindow.__lenis) {
+                      lenisWindow.__lenis.scrollTo('#projects', { offset: -80, duration: 1.5 });
+                    } else {
+                      const section = document.getElementById('projects');
+                      if (section) {
+                        const top = section.getBoundingClientRect().top + window.scrollY - 80;
+                        window.scrollTo({ top, behavior: 'smooth' });
+                      }
+                    }
                     setShowAll(false);
-                  }, 400);
-                }
-              }}
-            >
-              {showAll ? "View Less" : "View All Projects"}
-            </a>
+                  }
+                }}
+              >
+                {showAll ? "View Less" : "View All Projects"}
+              </button>
           </motion.div>
         </div>
       </div>

@@ -31,9 +31,10 @@ export default function Contact() {
       } else {
         throw new Error(data.message || 'Something went wrong');
       }
-    } catch (error: any) {
+    } catch (error) {
       setStatus('error');
-      setErrorMessage(error.message || 'Failed to send message. Is the backend server running?');
+      const err = error as Error;
+      setErrorMessage(err.message || 'Failed to send message. Is the backend server running?');
     }
   };
 

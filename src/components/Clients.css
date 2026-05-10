@@ -10,16 +10,90 @@
   border-radius: var(--rounded-xl);
   border: 1px solid var(--colors-hairline);
   transition: border-color 0.3s;
+  position: relative;
+  overflow: hidden;
 }
 
 .client-card:hover {
-  border-color: var(--colors-accent-blue);
+  border-color: var(--hover-color, var(--colors-accent-blue));
 }
 
-.client-card .headline {
+@keyframes fire-motion {
+  0% { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+  50% { transform: translate(-50%, -50%) rotate(180deg) scale(1.1); }
+  100% { transform: translate(-50%, -50%) rotate(360deg) scale(1); }
+}
+
+.smoke-effect {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 150%;
+  height: 150%;
+  border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+  transform: translate(-50%, -50%);
+  filter: blur(50px);
+  opacity: 0.12; /* Always visible to create the internal glow */
+  animation: fire-motion 8s linear infinite;
+  transition: opacity 0.5s ease-out, filter 0.5s ease-out;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.client-card:hover .smoke-effect {
+  opacity: 0.3;
+  filter: blur(40px);
+  animation-duration: 4s; /* Speeds up like a burning fire on hover */
+}
+
+.client-content {
+  position: relative;
+  z-index: 1;
+}
+
+.client-content .headline {
   margin-bottom: var(--spacing-sm);
 }
 
-.client-card .body-regular {
+.client-content .body-regular {
   color: var(--colors-ink-muted);
 }
+
+/* Marquee Styles for Mobile */
+.marquee-wrapper {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  padding: var(--spacing-lg) 0;
+  /* Add slight gradient fade to the edges */
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+.marquee-content {
+  display: flex;
+  gap: var(--spacing-md);
+  width: max-content;
+  animation: scroll-left 25s linear infinite;
+}
+
+.marquee-content:hover {
+  animation-play-state: paused;
+}
+
+.marquee-content .client-card {
+  width: 300px; /* Fixed width for mobile cards to prevent layout shifts */
+  flex-shrink: 0;
+  white-space: normal;
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    /* Translate left by half of the total width since we duplicated the array */
+    transform: translateX(calc(-50% - (var(--spacing-md) / 2)));
+  }
+}
+
