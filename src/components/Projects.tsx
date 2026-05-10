@@ -18,16 +18,16 @@ const projects = [
   {
     title: "MM Website",
     category: "Corporate Portfolio",
-    description: "Premium end-to-end company portfolio with interactive 3D elements.",
+    description: "Premium end-to-end company portfolio with interactive Designs.",
     link: "https://mm-website-gules.vercel.app/",
     image: mmImg
   },
   {
     title: "SnapOnn",
-    category: "Data Analytics",
-    description: "Automated web scraping and data pipeline architecture.",
+    category: "Online Payment Platform",
+    description: "Secure and seamless digital payment infrastructure and wallet integrations.",
     link: "https://snaponn.vercel.app/",
-    image: snaponnImg
+    image: "https://images.unsplash.com/photo-1620321023374-d1a68fbc720d?auto=format&fit=crop&q=80&w=800&h=600"
   }
 ];
 
@@ -50,11 +50,11 @@ export default function Projects() {
 
         <div className="projects-list">
           {projects.map((project, index) => (
-            <motion.a 
-              href={project.link} 
-              target="_blank" 
+            <motion.a
+              href={project.link}
+              target="_blank"
               rel="noreferrer"
-              className="project-row" 
+              className="project-row"
               key={index}
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}

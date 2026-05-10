@@ -4,6 +4,13 @@ import { motion } from 'framer-motion';
 export default function Hero() {
   return (
     <section className="hero section-padding">
+      {/* Animated Background Waves */}
+      <div className="hero-background">
+        <div className="wave wave1"></div>
+        <div className="wave wave2"></div>
+        <div className="wave wave3"></div>
+      </div>
+      
       <div className="container hero-content">
         <motion.h1 
           className="display-xxl hero-title"

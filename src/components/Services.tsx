@@ -31,25 +31,25 @@ const services = [
     title: "Finance & Tally",
     description: "Bookkeeping services, tax filing, and training on financial tools.",
     icon: <DollarSign size={24} />,
-    color: "surface"
+    color: "violet"
   },
   {
     title: "Customer Support",
     description: "Around-the-clock support and assistance for all your queries and technical issues.",
     icon: <Headphones size={24} />,
-    color: "surface"
+    color: "magenta"
   },
   {
     title: "Creative Multimedia",
     description: "High-quality content creation, video production, and modern website design.",
     icon: <PenTool size={24} />,
-    color: "surface"
+    color: "orange"
   },
   {
     title: "Collaborative Culture",
     description: "A supportive environment fostering creativity, innovation, and long-term partnerships.",
     icon: <Users size={24} />,
-    color: "surface"
+    color: "coral"
   }
 ];
 
