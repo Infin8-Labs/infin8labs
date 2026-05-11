@@ -208,7 +208,7 @@ a:hover {
 }
 
 @media (max-width: 810px) {
-  .display-xxl { font-size: 62px; letter-spacing: -3.1px; }
+  .display-xxl { font-size: 62px; letter-spacing: -3.1px; line-height: 1.1; }
   .display-xl { font-size: 48px; letter-spacing: -2.4px; }
   .display-lg { font-size: 36px; letter-spacing: -1.8px; }
   .display-md { font-size: 28px; letter-spacing: -0.8px; }
