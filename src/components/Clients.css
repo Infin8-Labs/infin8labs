@@ -61,39 +61,37 @@
 
 /* Marquee Styles for Mobile */
 .marquee-wrapper {
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
   position: relative;
   width: 100%;
   padding: var(--spacing-lg) 0;
   /* Add slight gradient fade to the edges */
   mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
   -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  scroll-behavior: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Hide scrollbar Firefox */
+}
+
+.marquee-wrapper::-webkit-scrollbar {
+  display: none; /* Hide scrollbar Chrome/Safari */
 }
 
 .marquee-content {
   display: flex;
   gap: var(--spacing-md);
   width: max-content;
-  animation: scroll-left 25s linear infinite;
 }
 
-.marquee-content:hover {
-  animation-play-state: paused;
+.marquee-group {
+  display: flex;
+  gap: var(--spacing-md);
 }
 
 .marquee-content .client-card {
   width: 300px; /* Fixed width for mobile cards to prevent layout shifts */
   flex-shrink: 0;
   white-space: normal;
-}
-
-@keyframes scroll-left {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    /* Translate left by half of the total width since we duplicated the array */
-    transform: translateX(calc(-50% - (var(--spacing-md) / 2)));
-  }
 }
 

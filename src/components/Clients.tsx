@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './Clients.css';
 import { motion } from 'framer-motion';
 
@@ -37,6 +37,8 @@ const clients = [
 
 export default function Clients() {
   const [isMobile, setIsMobile] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const groupRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -47,6 +49,52 @@ export default function Clients() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  useEffect(() => {
+    if (!isMobile) return;
+    const scrollContainer = scrollRef.current;
+    const group = groupRef.current;
+    if (!scrollContainer || !group) return;
+
+    let animationId: number;
+    let isTouching = false;
+    
+    // Gap is 15px (var(--spacing-md))
+    const gap = 15;
+
+    const handleTouchStart = () => { isTouching = true; };
+    const handleTouchEnd = () => { 
+      setTimeout(() => { isTouching = false; }, 800); 
+    };
+
+    scrollContainer.addEventListener('touchstart', handleTouchStart, { passive: true });
+    scrollContainer.addEventListener('touchend', handleTouchEnd);
+    scrollContainer.addEventListener('mousedown', handleTouchStart);
+    scrollContainer.addEventListener('mouseup', handleTouchEnd);
+    scrollContainer.addEventListener('mouseleave', handleTouchEnd);
+
+    const step = () => {
+      if (!isTouching && scrollContainer && group) {
+        scrollContainer.scrollLeft += 1;
+        const resetPoint = group.offsetWidth + gap;
+        if (scrollContainer.scrollLeft >= resetPoint) {
+          scrollContainer.scrollLeft -= resetPoint;
+        }
+      }
+      animationId = requestAnimationFrame(step);
+    };
+    
+    animationId = requestAnimationFrame(step);
+
+    return () => {
+      cancelAnimationFrame(animationId);
+      scrollContainer.removeEventListener('touchstart', handleTouchStart);
+      scrollContainer.removeEventListener('touchend', handleTouchEnd);
+      scrollContainer.removeEventListener('mousedown', handleTouchStart);
+      scrollContainer.removeEventListener('mouseup', handleTouchEnd);
+      scrollContainer.removeEventListener('mouseleave', handleTouchEnd);
+    };
+  }, [isMobile]);
+
   return (
     <section id="clients" className="clients section-padding">
       <div className="container">
@@ -56,21 +104,38 @@ export default function Clients() {
         </div>
 
         {isMobile ? (
-          <div className="marquee-wrapper">
+          <div className="marquee-wrapper" ref={scrollRef}>
             <div className="marquee-content">
-              {[...clients, ...clients].map((client, index) => (
-                <div 
-                  key={`marquee-${index}`} 
-                  className="client-card"
-                  style={{ '--hover-color': client.color } as React.CSSProperties}
-                >
-                  <div className="smoke-effect" style={{ background: client.color }}></div>
-                  <div className="client-content">
-                    <h3 className="headline">{client.name}</h3>
-                    <p className="body-regular">{client.description}</p>
+              <div className="marquee-group" ref={groupRef}>
+                {clients.map((client, index) => (
+                  <div 
+                    key={`group1-${index}`} 
+                    className="client-card"
+                    style={{ '--hover-color': client.color } as React.CSSProperties}
+                  >
+                    <div className="smoke-effect" style={{ background: client.color }}></div>
+                    <div className="client-content">
+                      <h3 className="headline">{client.name}</h3>
+                      <p className="body-regular">{client.description}</p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
+              <div className="marquee-group">
+                {clients.map((client, index) => (
+                  <div 
+                    key={`group2-${index}`} 
+                    className="client-card"
+                    style={{ '--hover-color': client.color } as React.CSSProperties}
+                  >
+                    <div className="smoke-effect" style={{ background: client.color }}></div>
+                    <div className="client-content">
+                      <h3 className="headline">{client.name}</h3>
+                      <p className="body-regular">{client.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         ) : (
