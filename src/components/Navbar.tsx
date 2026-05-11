@@ -16,9 +16,9 @@ export default function Navbar() {
   return (
     <nav className="top-nav glass-effect">
       <div className="container nav-content">
-        <div className="logo body-sm">
-          <strong>INFIN8 LABS</strong>
-        </div>
+        <a href="/" className="logo">
+          <img src="/logo-text.png" alt="Infin8 Labs" className="nav-logo-img" />
+        </a>
         <div className="nav-links body-sm">
           <a href="#services">Services</a>
           <a href="#projects">Work</a>

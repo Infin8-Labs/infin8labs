@@ -16,8 +16,21 @@
   height: 100%;
 }
 
-.logo strong {
-  letter-spacing: 1px;
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.nav-logo-img {
+  height: 24px;
+  width: auto;
+  display: block;
+  transition: opacity 0.2s;
+}
+
+.logo:hover .nav-logo-img {
+  opacity: 0.8;
 }
 
 .nav-links {
